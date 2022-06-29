@@ -104,7 +104,7 @@ namespace BuilderCS
     class House
     {
         public String houses = "";
-
+        private static String error = "";
         public void Add(String line)
         {
             houses += line + " ";
@@ -117,37 +117,59 @@ namespace BuilderCS
 
         public void BuildBasement()
         {
-            Basement basement = new Basement();
-            basement.Build();
-            this.Add("1 basement");
+            if(error == "")
+            {
+                Basement basement = new Basement();
+                basement.Build();
+                this.Add("1 basement");
+                error += "basement ";
+            }
+            else { WriteLine("I can't build two or more basements"); }
         }
 
         public void BuildWall(int num = 1)
         {
-            Walls wall = new Walls();
-            wall.Build();
-            this.Add(num + " wall");
+            if(error == "basement ")
+            {
+                Walls wall = new Walls();
+                wall.Build();
+                this.Add(num + " wall");
+                error += "walls ";
+            }
+            else { WriteLine("I can't build walls without basement"); }
         }
 
         public void BuildDoor(int num = 1)
         {
-            Door door = new Door();
-            door.Build();
-            this.Add(num + " door");
+            if (error == "basement walls ")
+            {
+                Door door = new Door();
+                door.Build();
+                this.Add(num + " door");
+            }
+            else { WriteLine("I can't build door without basement and walls"); }
         }
 
         public void BuildWindow(int num = 1)
         {
-            Window window = new Window();
-            window.Build();
-            this.Add(num + " window");
+            if (error == "basement walls ")
+            {
+                Window window = new Window();
+                window.Build();
+                this.Add(num + " window");
+            }
+            else { WriteLine("I can't build window without basement and walls"); }
         }
 
         public void BuildRoof()
         {
-            Roof roof = new Roof();
-            roof.Build();
-            this.Add("1 roof");
+            if (error == "basement walls ")
+            {
+                Roof roof = new Roof();
+                roof.Build();
+                this.Add("1 roof");
+            }
+            else { WriteLine("I can't build roof without basement and walls"); }
         }
     }
 
@@ -207,6 +229,8 @@ namespace BuilderCS
             TeamLeader teamLeader = new TeamLeader() { Name = "Raf", Age = 33 };
             teamLeader.GetName();
             teamLeader.WriteReport(team);
+
+            team.worker[2].house.BuildDoor(2); //I can't build door without basement and walls
 
             team.worker[1].house.BuildWall(4);
             team.worker[2].house.BuildDoor(2);
